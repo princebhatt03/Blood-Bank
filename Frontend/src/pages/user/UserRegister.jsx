@@ -156,4 +156,6 @@ const UserRegister = () => {
   );
 };
 
+// This component is used to register a user as a blood donor. It includes a form with fields for full name, email, mobile number, blood group, and checkboxes for agreeing to terms and conditions and indicating readiness to donate blood. The form data is managed using React's useState hook, and the form submission is handled with an asynchronous function that sends a POST request to the server. The component also handles success and error messages based on the response from the server.
+
 export default UserRegister;
