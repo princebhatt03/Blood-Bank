@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 
 const UserRegister = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,9 @@ const UserRegister = () => {
     donateBlood: false,
   });
 
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -18,10 +22,28 @@ const UserRegister = () => {
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log('User Registered:', formData);
-    // Later, integrate API call here to save data to the database
+    setMessage('');
+    setError('');
+
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/userRegister',
+        formData
+      );
+      setMessage(response.data.message);
+      setFormData({
+        fullName: '',
+        email: '',
+        mobile: '',
+        bloodGroup: '',
+        agreeTerms: false,
+        donateBlood: false,
+      });
+    } catch (error) {
+      setError(error.response?.data?.message || 'Something went wrong');
+    }
   };
 
   return (
@@ -30,6 +52,16 @@ const UserRegister = () => {
         <h2 className="text-2xl font-bold text-center text-red-600">
           Register as a Donor
         </h2>
+        {message && (
+          <p className="bg-green-500 text-white p-2 rounded mb-3 text-center">
+            {message}
+          </p>
+        )}
+        {error && (
+          <p className="bg-red-500 text-white p-2 rounded mb-3 text-center">
+            {error}
+          </p>
+        )}
         <form
           className="mt-4"
           onSubmit={handleSubmit}>

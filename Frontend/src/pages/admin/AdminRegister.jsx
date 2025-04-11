@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AdminRegister = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +12,8 @@ const AdminRegister = () => {
   });
 
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
   // Handling input change
   const handleChange = e => {
@@ -17,18 +21,26 @@ const AdminRegister = () => {
   };
 
   // Handling form submission
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    const { fullName, username, email, mobile, password } = formData;
-
-    if (!fullName || !username || !email || !mobile || !password) {
-      setError('All fields are required!');
-      return;
-    }
-
-    // Clear error if everything is filled
     setError('');
-    console.log('Admin Registered:', formData);
+    setSuccess('');
+
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/adminRegister',
+        formData
+      );
+
+      if (response.status === 201) {
+        setSuccess('Admin registered successfully!');
+        setTimeout(() => navigate('/adminHome'), 1000);
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.error || 'Something went wrong. Please try again.'
+      );
+    }
   };
 
   return (
@@ -38,7 +50,16 @@ const AdminRegister = () => {
           Admin Registration
         </h2>
 
-        {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+        {error && (
+          <p className="bg-red-500 text-white p-2 rounded mb-3 text-center">
+            {error}
+          </p>
+        )}
+        {success && (
+          <p className="bg-green-500 text-white p-2 rounded mb-3 text-center">
+            {success}
+          </p>
+        )}
 
         <form
           onSubmit={handleSubmit}
@@ -97,6 +118,12 @@ const AdminRegister = () => {
             type="submit"
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
             Register as Admin
+          </button>
+          <button
+            type="submit"
+            onClick={() => navigate('/adminLogin')}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+            Login as Admin
           </button>
         </form>
       </div>

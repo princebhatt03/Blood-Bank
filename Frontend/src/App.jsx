@@ -4,14 +4,14 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import FrontPage from './pages/FrontPage';
 import AboutUs from './pages/AboutUs';
-import ContactUs from './pages/Contact';
+import ProtectedRoute from './components/ProtectedRoute';
 import UserRegister from './pages/user/UserRegister';
 import AdminRegister from './pages/admin/AdminRegister';
 import TermsAndConditions from './pages/TermsAndConditions';
 import AdminHome from './pages/admin/AdminHome';
 import Contact from './pages/Contact';
 import PatientDetails from './pages/PatientDetails';
-import AddPatient from './pages/admin/AddPatient';
+import AdminLogin from './pages/admin/AdminLogin';
 
 function App() {
   return (
@@ -38,10 +38,12 @@ function App() {
           path="/about"
           element={<AboutUs />}
         />
-        <Route
-          path="/adminHome"
-          element={<AdminHome />}
-        />
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/adminHome"
+            element={<AdminHome />}
+          />
+        </Route>
         <Route
           path="/contact"
           element={<Contact />}
@@ -51,8 +53,8 @@ function App() {
           element={<PatientDetails />}
         />
         <Route
-          path="/addPatient"
-          element={<AddPatient />}
+          path="/adminLogin"
+          element={<AdminLogin />}
         />
       </Routes>
       <Footer />
