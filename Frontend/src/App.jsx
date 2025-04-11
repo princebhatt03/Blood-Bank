@@ -62,9 +62,12 @@ function App() {
   );
 }
 
+<<<<<<< HEAD
 // Exporting the App component
 // This allows the component to be imported and used in other files
 // For example, in index.js, you would import it like this:
 // import App from './App';
 
+=======
+>>>>>>> 12c685d1adcc110d3f15dbf94f35070c17b6fd5d
 export default App;
